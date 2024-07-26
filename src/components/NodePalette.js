@@ -1,5 +1,5 @@
 import React from 'react';
-import { useReactFlow } from 'reactflow';
+import { useReactFlow } from '@xyflow/react';
 import { CloudIcon, DatabaseIcon } from '@heroicons/react/solid';
 import './NodePalette.css';
 
@@ -27,38 +27,14 @@ const nodeTypes = {
 };
 
 const NodePalette = () => {
-  const { project, addNodes } = useReactFlow();
+  useReactFlow();
 
   const onDragStart = (event, nodeType) => {
     event.dataTransfer.setData('application/reactflow', nodeType);
     event.dataTransfer.effectAllowed = 'move';
   };
 
-  const onDrop = (event) => {
-    event.preventDefault();
 
-    const reactFlowBounds = project();
-    const type = event.dataTransfer.getData('application/reactflow');
-    const position = project({ x: event.clientX, y: event.clientY });
-
-    if (typeof type === 'undefined' || !type) {
-      return;
-    }
-
-    const newNode = {
-      id: `${type}-${new Date().getTime()}`,
-      type,
-      position,
-      data: { label: `${nodeTypes[type].label}` },
-    };
-
-    addNodes(newNode);
-  };
-
-  const onDragOver = (event) => {
-    event.preventDefault();
-    event.dataTransfer.dropEffect = 'move';
-  };
 
   return (
     <div className="node-palette">
@@ -68,8 +44,8 @@ const NodePalette = () => {
           <div
             key={key}
             className="node-item"
-            draggable
-            onDragStart={(event) => onDragStart(event, key)}
+            
+            onDragStart={(event) => onDragStart(event , 'default')} draggable
           >
             {nodeTypes[key].icon}
             <span>{nodeTypes[key].label}</span>
